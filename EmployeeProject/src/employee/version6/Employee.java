@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package version6;
+package employee.version6;
 
 /**
  *
  * @author User
  */
-import employee.version4.*;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;

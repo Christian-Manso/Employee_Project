@@ -1,6 +1,7 @@
-package version6;
+package employee.version6;
 
-import employee.version4.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,53 +15,33 @@ import employee.version4.*;
  */
 public class EmployeeRoster extends Employee {
     
-    private Employee[] Roster;
-    private int count;
-    private int max = 10;
+    private final ArrayList<Employee> Employees;
     
-    public EmployeeRoster() {
-        Roster = new Employee[max];
-        count = 0;
+    public EmployeeRoster(){
+        Employees = new ArrayList<>();
     }
 
-    public EmployeeRoster(int max) {
-        this();
-        this.max = max;
+    public ArrayList<Employee> getEmployees() {
+        return Employees;
     }
 
-    public Employee[] getEmployees() {
-        return Roster;
-    }
-
-    public int getCount() {
-        return count;
-    }
     
-    public void addEmployee(Employee... input) {
-        for (Employee e : input) {
-            Roster[count] = e;
-            count++;
-        }
+    public void addEmployee(Employee input){   
+        Employees.addAll(Arrays.asList(input)); 
     }
     
     public Employee removeEmployee(int id) {
-        Employee removed = null;
-        
-        for (int x = 0; x < count; x++) {
-            if (id == Roster[x].getEmpID()) {
-                this.count--;
-                removed = Roster[x];
-                for (int y = x; y < count; y++) {
-                    Roster[y] = Roster[y + 1];
-                }
+        for (Employee x : Employees) {
+            if (x != null && x.getEmpID() == id) {
+                Employees.remove(x);
+                return x;
             }
         }
-
-        return removed;
+        return null;
     }
     
     public boolean updateEmployee(int id, Name name) {
-        for (Employee x : Roster) {
+        for (Employee x : Employees) {
             if (x != null && x.getEmpID() == id) {
                 x.setEmpName(name);
                 return true;
@@ -71,20 +52,19 @@ public class EmployeeRoster extends Employee {
     }
     
     public int countEmpType(String type) {
-        int count = 0;
-        for (int x = 0; Roster[x]!= null; x++) {
-            Employee y = Roster[x];
+        int empCount = 0;
+        for (Employee y : Employees) {
             if (isInstance(y, type)) {
-                count++;
+                empCount++;
             }
         }
-
-        return count;
+        return empCount;
     }
     
     private boolean isInstance(Employee y, String type) {
         boolean instance;
         type = type.toUpperCase();
+        
         switch (type) {
             case "HE":
                 instance = (y instanceof HourlyEmployee);
@@ -92,64 +72,61 @@ public class EmployeeRoster extends Employee {
             case "PW":
                 instance = (y instanceof PieceWorkerEmployee);
                 break;
-            case "CE":
-                instance = (y instanceof CommissionEmployee);
-                break;
-            case "BPC":
+            case "BCE":
                 instance = (y instanceof BasePlusCommissionEmployee);
+                break;
+            case "CE":
+                instance = (y instanceof CommissionEmployee) && !(y instanceof BasePlusCommissionEmployee);
                 break;
             default:
                 instance = false;
         }
-
+        
         return instance;
     }
     
     public void displayEmployeeType(String type) {
-        int length = this.countEmpType(type), idx = 0;
-
+        int length = this.countEmpType(type);
         if (length == 0) {
             return;
         }
-        Employee[] searchArr = new Employee[length];
+        ArrayList<Employee> searchArr = new ArrayList<>();
         System.out.println("Displaying Employees of Type " + type.toUpperCase());
-        for (int y = 0; y < count; y++) {
-            Employee x = Roster[y];
+        for (Employee x : Employees) {
             if (isInstance(x, type)) {
-                searchArr[idx++] = x;
+                searchArr.add(x);
             }
         }
-        this.displayAllEmployees(searchArr, length);
+        this.displayAllEmployees(searchArr);
     }
     
     
     public EmployeeRoster searchEmployee(String keyword) {
-        EmployeeRoster searchedRoster = new EmployeeRoster(this.count);
+        EmployeeRoster searchedRoster = new EmployeeRoster();
 
-        for (int i = 0; i < count; i++) {
-            Employee x = Roster[i];
-            if (x.getEmpName().toString().toLowerCase().contains(keyword.toLowerCase())) {
+        for (Employee x : Employees) {
+            if (x.getEmpName().toLowerCase().contains(keyword.toLowerCase())) {
                 searchedRoster.addEmployee(x);
             }
         }
+
         System.out.println("Matches that contain keyword: `" + keyword + "`");
-        displayAllEmployees(searchedRoster.getEmployees(), searchedRoster.count);
+        displayAllEmployees(searchedRoster.getEmployees());
         return searchedRoster;
     }
     
     public void displayAllEmployees() {
-        this.displayAllEmployees(Roster, count);
+        this.displayAllEmployees(Employees);
     }
 
-    public void displayAllEmployees(Employee[] EmpArr, int length) {
+    public void displayAllEmployees(ArrayList<Employee> EmpArr) {
         double salary;
-        if (length == 0) {
+        if (EmpArr.isEmpty()) {
             System.out.println("Employee Roster is Empty!\n");
             return;
         }
-        
-        for (int y = 0; y < length; y++) {
-            Employee x = Roster[y];
+        System.out.println("\n");
+        for (Employee x : EmpArr) {
             if (x != null) {
                 
                 
@@ -158,8 +135,8 @@ public class EmployeeRoster extends Employee {
                 System.out.println("\nClass: " + x.getClass().getSimpleName());
                 System.out.println("\nSalary: " + x.computeSalary());
             }
-
         }
+
         System.out.println("\n");
     }
 

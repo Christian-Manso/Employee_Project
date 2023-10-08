@@ -1,6 +1,6 @@
-package version6;
+package employee.version6;
 
-import employee.version4.*;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.

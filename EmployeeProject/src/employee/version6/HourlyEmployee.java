@@ -1,4 +1,4 @@
-package version6;
+package employee.version6;
 
 import employee.version4.*;
 import java.text.ParseException;
