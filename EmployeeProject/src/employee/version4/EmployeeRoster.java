@@ -130,13 +130,13 @@ public class EmployeeRoster extends Employee {
     } else if (x instanceof PieceWorkerEmployee) {
         PieceWorkerEmployee pwe = (PieceWorkerEmployee) x;
         salary = pwe.computeSalary();
-    } else if (x instanceof CommissionEmployee) {
-        CommissionEmployee ce = (CommissionEmployee) x;
-        salary = ce.computeSalary();
     } else if (x instanceof BasePlusCommissionEmployee) {
         BasePlusCommissionEmployee bce = (BasePlusCommissionEmployee) x;
         salary = bce.computeSalary();
-    }
+    } else if (x instanceof CommissionEmployee) {
+        CommissionEmployee ce = (CommissionEmployee) x;
+        salary = ce.computeSalary();
+    } 
         
         return salary;
     }
