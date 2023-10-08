@@ -35,14 +35,17 @@ public class TestMain {
         
         EmployeeRoster er = new EmployeeRoster();
 
-        er.addEmployee(bce, hr, pw, ce);
+        er.addEmployee(bce);
+        er.addEmployee(hr);
+        er.addEmployee(pw);
+        er.addEmployee(ce);
         er.displayAllEmployees();
-        System.out.println("Removed: " + er.removeEmployee(0));
+        System.out.println("Removed: " + er.removeEmployee(22102774));
         er.displayAllEmployees();
         er.searchEmployee("Montanez");
         er.updateEmployee(22102775, new Name("Simone", "Mikaela", "Montanez"));
         er.searchEmployee("Montanez");
         er.displayAllEmployees();
-        er.displayEmployeeType("pw");
+        er.displayEmployeeType("bce");
     }
 }

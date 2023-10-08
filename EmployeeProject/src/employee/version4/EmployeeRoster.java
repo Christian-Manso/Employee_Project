@@ -14,16 +14,18 @@ public class EmployeeRoster extends Employee {
     
     private Employee[] Roster;
     private int count;
-    private int max = 10;
+    private int max;
     
-    public EmployeeRoster() {
+    public EmployeeRoster(){
+        max = 10;
         Roster = new Employee[max];
         count = 0;
     }
 
     public EmployeeRoster(int max) {
-        this();
         this.max = max;
+        Roster = new Employee[max];
+        count = 0;
     }
 
     public Employee[] getEmployees() {
@@ -34,11 +36,9 @@ public class EmployeeRoster extends Employee {
         return count;
     }
     
-    public void addEmployee(Employee... input) {
-        for (Employee e : input) {
-            Roster[count] = e;
-            count++;
-        }
+    public void addEmployee(Employee input) {   
+        Roster[count] = input;
+        count++;  
     }
     
     public Employee removeEmployee(int id) {
@@ -83,6 +83,7 @@ public class EmployeeRoster extends Employee {
     private boolean isInstance(Employee y, String type) {
         boolean instance;
         type = type.toUpperCase();
+        
         switch (type) {
             case "HE":
                 instance = (y instanceof HourlyEmployee);
@@ -90,22 +91,22 @@ public class EmployeeRoster extends Employee {
             case "PW":
                 instance = (y instanceof PieceWorkerEmployee);
                 break;
-            case "CE":
-                instance = (y instanceof CommissionEmployee);
-                break;
-            case "BPC":
+            case "BCE":
                 instance = (y instanceof BasePlusCommissionEmployee);
+                break;
+            case "CE":
+                instance = (y instanceof CommissionEmployee) && !(y instanceof BasePlusCommissionEmployee);
                 break;
             default:
                 instance = false;
         }
-
+        
         return instance;
     }
     
     public void displayEmployeeType(String type) {
         int length = this.countEmpType(type), idx = 0;
-
+        
         if (length == 0) {
             return;
         }
@@ -142,15 +143,19 @@ public class EmployeeRoster extends Employee {
     
     public EmployeeRoster searchEmployee(String keyword) {
         EmployeeRoster searchedRoster = new EmployeeRoster(this.count);
-
+        
         for (int i = 0; i < count; i++) {
             Employee x = Roster[i];
-            if (x.getEmpName().toString().toLowerCase().contains(keyword.toLowerCase())) {
+            
+            if (x.getEmpName().toLowerCase().contains(keyword.toLowerCase())) {
                 searchedRoster.addEmployee(x);
             }
         }
+        
+        
         System.out.println("Matches that contain keyword: `" + keyword + "`");
         displayAllEmployees(searchedRoster.getEmployees(), searchedRoster.count);
+        
         return searchedRoster;
     }
     
@@ -166,7 +171,7 @@ public class EmployeeRoster extends Employee {
         }
         
         for (int y = 0; y < length; y++) {
-            Employee x = Roster[y];
+            Employee x = EmpArr[y];
             if (x != null) {
                 salary = getSalary(x);
                 
